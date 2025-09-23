@@ -14,7 +14,7 @@
 </div>
 
 <script type="text/javascript">
-		var CD = `
+		var CD = JSON.parse ( `
 					{
 						"TITLE": "Empire Burlesque",
 						"ARTIST": "Bob Dylan",
@@ -23,14 +23,19 @@
 						"PRICE": "10.90",
 						"YEAR": "1985"
 					}
-				`
+				`)
 	
 	var i;
 	document.getElementById("Button1").addEventListener('click',readTab);
 
 	function readTab(){
-				//TODO
+		let text = ""
+		for  (i in CD) {
+			text += i + ": " + CD[i] + "\n";
+		}
+		console.log(text)		
 	}
+
   
 </script>
 

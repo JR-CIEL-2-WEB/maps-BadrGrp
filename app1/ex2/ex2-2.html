@@ -1,0 +1,68 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>json Employes</title>
+</head>
+<body>
+
+<h1>JRostand Reperes Stade</h1>
+<hr>
+<div id="map">...</div>
+<style type="text/css">
+    /* Always set the map height explicitly to define the size of the div
+     * element that contains the map. */
+    #map {
+        height: 100%;
+    }
+
+    /* Optional: Makes the sample page fill the window. */
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+</style>
+
+<script   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7Y32T_PJHZxYcK3BJYJFNwSl6cuvLXpo&callback=initMap"></script>
+<script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    // au chargement de la page
+    window.onload = loadDoc();
+
+
+    // Ajax avec JQuery
+    function loadDoc() {
+        $.ajax({
+                url: "markersJrostand.json",
+                method: "GET",
+                //data: { id : menuId },
+                dataType: "JSON",
+
+                success: function(markers){
+                    text = ""
+                    for  (i =0; i <markers.length; i++) {
+            			let marker = markers[i]
+         			for(key in marker){
+            			text +=  key +  ":" + marker[key] + "\n";
+         			}
+                    }
+
+                    console.log(text + "\n")
+
+
+
+
+            }
+        }
+        );
+        console.log("ok");
+    };
+
+
+</script>
+
+</body>
+</html>
