@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>JRostand Stade Repères</title>
+    <style>
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Courses</h1>
+<hr>
+
+<label for="courseSelector">Choisissez une course :</label>
+<select id="courseSelector">
+    <option disabled selected>-- Sélectionnez une course --</option>
+</select>
+
+<div id="map"></div>
+
+<!-- Google Maps API -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7Y32T_PJHZxYcK3BJYJFNwSl6cuvLXpo&callback=initMap" defer></script>
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    var allCourses = [];
+    var map;
+    var markers = [];
+    var polyline;
+
+    // Charger les données depuis courses.json
+    function loadCourses() {
+        $.ajax({
+            url: "courses.json",
+            method: "GET",
+            dataType: "json",
+            success: function(data) {
+                allCourses = data;
+                populateSelector();
+                initMap(); // Initialiser la carte avec la première course si nécessaire
+            },
+            error: function(err) {
+                console.error("Erreur de chargement JSON :", err);
+            }
+        });
+    }
+
+    // Remplir le <select> avec les noms des courses
+    function populateSelector() {
+        const selector = $("#courseSelector");
+        allCourses.forEach((data, index) => {
+            selector.append(`<option value="${index}">${data.name}</option>`);
+        });
+
+        // Événement au changement de sélection
+        selector.on("change", function() {
+            const selectedIndex = $(this).val();
+            showCourse(selectedIndex);
+        });
+    }
+
+    // Initialiser la carte vide
+    function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: 48.859, lng: 2.347 }, // Position par défaut (Paris)
+            zoom: 14,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+    }
+
+    // Afficher les marqueurs et la polyligne pour la course sélectionnée
+    function showCourse(index) {
+        const course = allCourses[index];
+
+        // Nettoyer anciens marqueurs
+        markers.forEach(marker => marker.setMap(null));
+        markers = [];
+
+        // Supprimer ancienne polyligne
+        if (polyline) {
+            polyline.setMap(null);
+        }
+
+        // Ajouter les nouveaux points
+        const bounds = new google.maps.LatLngBounds();
+        const pathCoords = [];
+
+        course.points.forEach((point, idx) => {
+            const position = new google.maps.LatLng(point.lat, point.lng);
+            bounds.extend(position);
+            pathCoords.push(position);
+
+            const marker = new google.maps.Marker({
+                position: position,
+                map: map,
+                title: `${course.name} - Point ${idx + 1}`
+            });
+
+            markers.push(marker);
+        });
+
+        // Afficher polyligne
+        polyline = new google.maps.Polyline({
+            path: pathCoords,
+            geodesic: true,
+            strokeColor: "#FF0000",
+            strokeOpacity: 1.0,
+            strokeWeight: 2
+        });
+        polyline.setMap(map);
+
+        // Ajuster la vue
+        map.fitBounds(bounds);
+    }
+
+    $(document).ready(function() {
+        loadCourses();
+    });
+</script>
+
+</body>
+</html>
