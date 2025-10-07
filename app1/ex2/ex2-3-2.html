@@ -1,0 +1,176 @@
+<!DOCTYPE html >
+<html>
+<head>
+    <meta charset="utf-8">
+<<<<<<< HEAD
+    <title>json Employes</title>
+=======
+    <title>JRostand stade reperes</title>
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+>>>>>>> 2d5e9ad (fait)
+</head>
+<body>
+
+<h1>JRostand Reperes Stade</h1>
+<hr>
+<<<<<<< HEAD
+<div id="map">...</div>
+<style type="text/css">
+    /* Always set the map height explicitly to define the size of the div
+     * element that contains the map. */
+    #map {
+        height: 100%;
+    }
+
+    /* Optional: Makes the sample page fill the window. */
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+</style>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7Y32T_PJHZxYcK3BJYJFNwSl6cuvLXpo&callback=initMap"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    // au chargement de la page
+    window.onload = loadDoc;
+
+    var markers; // variable globale pour les markers
+    var map; // variable globale pour la map
+=======
+<div id="map" style="width: 100%; height: 500px;"></div>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7Y32T_PJHZxYcK3BJYJFNwSl6cuvLXpo&callback=initMap"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    var markers;
+>>>>>>> 2d5e9ad (fait)
+
+    // Ajax avec JQuery
+    function loadDoc() {
+        $.ajax({
+<<<<<<< HEAD
+            url: "markersJrostand.json",   // url du fichier json contenant les markers
+            method: "GET",                 // méthode GET pour récupérer le fichier
+            dataType: "json",             // type attendu : JSON
+            success: function(dataMarkers){
+                markers = dataMarkers;
+
+                // Afficher chaque coordonnée dans la console
+                for(let i = 0; i < markers.length; i++){
+                    let marker = markers[i];
+                    for(let key in marker){
+                        console.log(key + ": " + marker[key]);
+                    }
+                    console.log("____________");
+                }
+
+                // Initialiser la map après avoir récupéré les markers
+                initMap();
+            }
+        });
+    };
+
+    // Fonction pour initialiser la map, ajouter les markers et tracer la polyline
+=======
+            url: "markersJrostand.json",
+            method: "GET",
+            dataType: "json",
+            success: function(dataMarkers){
+                markers = dataMarkers;
+                for(let i = 0; i < markers.length; i++){
+                    let marker = markers[i];
+                    for(key in markers[i]){
+                        console.log(key + ":" + marker[key]);
+                    }
+                    console.log("____________");
+                }
+                initMap();
+            }
+        });
+    }
+
+    // Initialisation de la carte et affichage des marqueurs + polylines
+>>>>>>> 2d5e9ad (fait)
+    function initMap(){
+        var options = {
+            center: new google.maps.LatLng(48.95930033308523, 2.5477890651742516),
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+<<<<<<< HEAD
+        // Constructeur de la map
+        map = new google.maps.Map(document.getElementById("map"), options);
+
+        // Tableau pour stocker les positions des markers (LatLng)
+        var pathCoordinates = [];
+
+        // Ajouter les markers sur la carte
+        for(let i = 0; i < markers.length; i++){
+            let latlng = markers[i];
+
+            // Créer un marker Google Maps
+=======
+        var map = new google.maps.Map(document.getElementById("map"), options);
+
+        // Tableau pour stocker les positions des marqueurs
+        var path = [];
+
+        // On positionne les marqueurs sur la carte
+        for (let i = 0; i < markers.length; i++) {
+            let latlng = new google.maps.LatLng(markers[i].lat, markers[i].lng);
+>>>>>>> 2d5e9ad (fait)
+            new google.maps.Marker({
+                position: latlng,
+                map: map
+            });
+<<<<<<< HEAD
+
+            // Ajouter la position au tableau pour la polyline
+            pathCoordinates.push(new google.maps.LatLng(latlng.lat, latlng.lng));
+        }
+
+        // Création de la polyline entre les markers
+        var polyline = new google.maps.Polyline({
+            path: pathCoordinates,
+            geodesic: true,
+            strokeColor: '#FF0000',   // Couleur rouge
+            strokeOpacity: 1.0,
+            strokeWeight: 2
+        });
+
+        // Ajouter la polyline à la carte
+        polyline.setMap(map);
+    }
+</script>
+
+</body>
+</html>
+=======
+            path.push(latlng);
+        }
+
+        // Création de la polyline reliant les marqueurs
+        if (path.length > 1) {
+            var polyline = new google.maps.Polyline({
+                path: path,
+                geodesic: true,
+                strokeColor: "#FF0000",
+                strokeOpacity: 1.0,
+                strokeWeight: 2
+            });
+            polyline.setMap(map);
+        }
+    }
+
+    // Charger les données au chargement de la page
+    google.maps.event.addDomListener(window, 'load', loadDoc);
+</script>
+
+</body>
+</html>
+>>>>>>> 2d5e9ad (fait)

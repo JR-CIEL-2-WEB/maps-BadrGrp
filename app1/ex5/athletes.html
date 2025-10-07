@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Lien vers le fichier CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/stylesA.css">
+
+    <title> Run </title>
+  </head>
+  <body>
+    <div id="overlay" class="overlay"></div>
+    
+    
+    <!-- Menu pour Mobile -->
+    <div id="mobile-menu" class="mobile-main-menu">
+      <ul>
+
+        <li><a href="Login.html"> Connexion </a></li>
+        <li><a href="index.html">Sports</a></li>
+        <li><a href="athletes.html">Athlètes</a></li>
+        <li><a href="infos.html">Infos</a></li>
+        <li><a href="records.html">Records</a></li>
+        <li><a href="courses.html">Prochaines Courses</a></li>
+        <li><a href="categories.html">Catégories</a></li>
+      </ul>
+    </div>
+
+    
+
+    <!-- Header et Menu Desktop -->
+    <header class="main-header">
+      <div class="logo">
+        <a href="index.html">
+          <img src="img/logo.png" alt="Run">
+        </a>
+      </div>
+      <nav class="desktop-main-menu">
+      </nav>
+    </header>
+
+    <!-- Hamburger Menu (Mobile) -->
+    <button id="menu-btn" class="hamburger" type="button">
+      <span class="hamburger-top"></span>
+      <span class="hamburger-middle"></span>
+      <span class="hamburger-bottom"></span>
+    </button>
+<body>
+    <div class="container">
+        <header>
+            <h1>Classement des Coureurs</h1>
+            <div class="search-container">
+                <input
+                type="search"
+                id="searchInput"
+                placeholder="Rechercher un athletes"
+
+                />
+
+            </div>
+        </header>
+
+
+        <div class="table-container">
+            <table id="runnersTable">
+                <thead>
+                    <tr>
+                        <th>Position</th>
+                        <th>Athlète</th>
+                        <th>Pays</th>
+                        <th>Temps</th>
+                        <th>Vitesse</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="position gold">1</span></td>
+                        <td>
+                            <div class="athlete-info">
+                                <span class="name">Eliud Kipchoge</span>
+                                <span class="record">Record Mondial</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="country">Kenya</span>
+                        </td>
+                        <td>2:01:39</td>
+                        <td>20.7 km/h</td>
+                    </tr>
+                    <tr>
+                        <td><span class="position silver">2</span></td>
+                        <td>
+                            <div class="athlete-info">
+                                <span class="name">Kenenisa Bekele</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="country">Éthiopie</span>
+                        </td>
+                        <td>2:01:41</td>
+                        <td>20.7 km/h</td>
+                    </tr>
+                    <tr>
+                        <td><span class="position bronze">3</span></td>
+                        <td>
+                            <div class="athlete-info">
+                                <span class="name">Birhanu Legese</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="country">Éthiopie</span>
+                        </td>
+                        </div>
+                        <td>2:02:48</td>
+                        <td>20.5 km/h</td>
+                    </tr>
+                    <tr>
+                        <td><span class="position">4</span></td>
+                        <td>
+                            <div class="athlete-info">
+                                <span class="name">Mosinet Geremew</span>
+                            </div>
+                            <td>
+                                <span class="country">Éthiopie</span>
+                            </td>
+    
+
+                        <td>2:02:55</td>
+                        <td>20.5 km/h</td>
+                    </tr>
+                    <tr>
+                        <td><span class="position">5</span></td>
+                        <td>
+                            <div class="athlete-info">
+                                <span class="name">Lawrence Cherono</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="country">Kenya</span>
+                        </td>
+                        <td>2:03:04</td>
+                        <td>20.4 km/h</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <script src="js/scriptShearch.js"></script>
+            <script src="js/script.js"></script>

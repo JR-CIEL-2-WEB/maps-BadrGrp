@@ -17,44 +17,69 @@
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7Y32T_PJHZxYcK3BJYJFNwSl6cuvLXpo&callback=loadDoc&v=weekly" defer   ></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
+    let map; // Déclaration globale pour la carte
 
-       
-        
-        
-        var markers;
-
-        // when page is API google maps is complete, process for the map!
-        // Ajax avec JQuery
     function loadDoc() {
         $.ajax({
-                url: // TODO1,
-                method: // TODO2,
-                dataType: // TODO3,
-                success: function(markers){
-                    // TODO4 :
-                            /* markers representera un objet JSON retourné par le serveur */
-                            /*
-                                compléter le code de la fonction afin d'afficher les chaque coordonnée  à la console
-                            */
+            url: 'markersJrostand.json', 
+            method: 'GET',       
+            dataType: 'json',    
+            success: function (markers) {
+                    // Initialisation de la carte
+                    map = new google.maps.Map(document.getElementById("map"), {
+                        zoom: 16,
+                        center: { lat: 48.9605, lng: 2.5480 }, // centre de la zone
+                    });
 
-                            /*
-                                vous utiliserez deux boucles for
-                                - boucle for classique sur markers
-                                - boucle for in sur marker
-                             */
+                    // InfoWindow réutilisable
+                    const infoWindow = new google.maps.InfoWindow();
 
-                            /*
-                                Créer des markers Google avec l'API Google Maps en utilisant l'objet renvoyé par
-                                le serveur web. Afficher votre map.
-                             */
-                    // fin  TODO4
+                    for (let i = 0; i < markers.length; i++) {
+                        const markerData = markers[i];
+
+                        let marker = new google.maps.Marker({
+                            position: { lat: markerData.lat, lng: markerData.lng },
+                            map: map,
+                            title: `Repère ${i + 1}`
+                        });
+
+                        console.log(`Repère ${i + 1}:`, markerData);
+
+                        // Deux lieux avec InfoWindow
+                        if (i === 0) { // Repère 1 : Stade Jean Rostand
+                            marker.addListener('click', function () {
+                                infoWindow.setContent(`
+                                    <div>
+                                        <h3>Stade Jean Rostand</h3>
+                                        <p>Terrain de sport du lycée. Utilisé pour l'EPS et les activités scolaires.</p>
+                                    </div>
+                                `);
+                                infoWindow.open(map, marker);
+                            });
+                        } else if (i === 3) { // Repère 4 : Parc des Sports
+                            marker.addListener('click', function () {
+                                infoWindow.setContent(`
+                                    <div>
+                                        <h3>Parc des Sports</h3>
+                                        <p>Un espace pour pratiquer du sport ou se détendre en plein air.</p>
+                                    </div>
+                                `);
+                                infoWindow.open(map, marker);
+                            });
+                        } else {
+                            // Alerte pour les autres repères
+                            marker.addListener('click', function () {
+                                alert(`Vous avez cliqué sur le repère ${i + 1}`);
+                            });
                         }
-            }
-        );
-    };
-
+                    }
+                },
+                error: function (err) {
+                    console.error("Erreur lors du chargement des marqueurs :", err);
+                }
+            });
+        }
     </script>
-
 
 </body>
 

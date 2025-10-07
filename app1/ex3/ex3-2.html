@@ -3,81 +3,96 @@
 <head>
     <meta charset="utf-8">
     <title>JRostand stade reperes</title>
+    <style>
+      /* Assure que la carte prenne de la place visible */
+      #map {
+        height: 500px;
+        width: 100%;
+      }
+    </style>
 </head>
 <body>
 
 <h1>JRostand Reperes Stade</h1>
 <hr>
-<div id="map">...</div>
+<div id="map"></div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-<script   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7Y32T_PJHZxYcK3BJYJFNwSl6cuvLXpo&callback=initMap"></script>
-<script  src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+    var markersData;
 
-    // au chargement de la page
-    //window.onload = loadDoc();
-    // when page is ready, initialize the map!
-    google.maps.event.addDomListener(window, 'load', loadDoc());
-    var markers;
-
-    // Ajax avec JQuery
+    // Chargement des données JSON via AJAX
     function loadDoc() {
         $.ajax({
-                url: "markersJrostand.json",
-                method: "GET",
-                //data: { id : menuId },
-                dataType: "json",
-                success: function(dataMarkers){
-                            markers = dataMarkers;
-                            for(let i = 0; i < markers.length;i++){
-                                let marker = markers[i];
-                                for(key in markers[i]){
-                                    console.log(key + ":" + marker[key]);
-                                }
-                                console.log("____________");
-                            }
-                            initMap();
-                        }
+            url: "markersJrostand.json",
+            method: "GET",
+            dataType: "json",
+            success: function(dataMarkers) {
+                markersData = dataMarkers;
+                for(let i = 0; i < markersData.length; i++) {
+                    let marker = markersData[i];
+                    for(let key in marker) {
+                        console.log(key + ":" + marker[key]);
+                    }
+                    console.log("____________");
+                }
+                initMap(); // Appel de l'initialisation de la carte après chargement des données
+            },
+            error: function(err) {
+                console.error("Erreur de chargement JSON :", err);
             }
-        );
+        });
     }
 
-   function initMap(){
-       var options = {
-           center: new google.maps.LatLng(48.95930033308523, 2.5477890651742516),
-           zoom: 15,
-           mapTypeId: google.maps.MapTypeId.ROADMAP
-       };
+    // Initialisation de la carte
+    function initMap() {
+        var options = {
+            center: new google.maps.LatLng(48.95930033308523, 2.5477890651742516),
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
 
+        var map = new google.maps.Map(document.getElementById("map"), options);
+        var infoWindow = new google.maps.InfoWindow();
 
-        /*****   Markers  *****/
+        // Positionner les marqueurs avec infoWindow au clic
+        for (let i = 0; i < markersData.length; i++) {
+            let data = markersData[i];
+            let position = new google.maps.LatLng(data.lat, data.lng);
 
-       var map = new google.maps.Map(document.getElementById("map"), options);
+            let marker = new google.maps.Marker({
+                position: position,
+                map: map,
+                title: "Repère ID: " + data.id
+            });
 
-       // On positionne les marqueurs sur la carte
-       for (let i = 0; i < markers.length; i++) {
-           let latlng = markers[i];
-           new google.maps.Marker({
-               position: latlng,
-               map : map
-           });
-       }
+            // Ajout du listener clic pour afficher une infoWindow personnalisée
+            marker.addListener('click', function() {
+                infoWindow.setContent('<div><strong>Repère ID :</strong> ' + data.id + '</div>');
+                infoWindow.open(map, marker);
+            });
+        }
 
-       /**** Polylines *****/
-       const flightPath = new google.maps.Polyline({
-           path: markers,
-           geodesic: true,
-           strokeColor: "#FF0000",
-           strokeOpacity: 1.0,
-           strokeWeight: 2,
-       });
-       flightPath.setMap(map);
+        // Polyligne reliant les points
+        const pathCoords = markersData.map(item => ({lat: item.lat, lng: item.lng}));
+        const flightPath = new google.maps.Polyline({
+            path: pathCoords,
+            geodesic: true,
+            strokeColor: "#FF0000",
+            strokeOpacity: 1.0,
+            strokeWeight: 2,
+        });
+        flightPath.setMap(map);
     }
 
-
+    // Lancer le chargement AJAX dès que le DOM est prêt
+    $(document).ready(function() {
+        loadDoc();
+    });
 </script>
 
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7Y32T_PJHZxYcK3BJYJFNwSl6cuvLXpo"></script>
 
 </body>
 </html>

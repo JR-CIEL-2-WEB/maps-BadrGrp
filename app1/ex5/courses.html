@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Lien vers le fichier CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+
+    <title> Run </title>
+
+    <style>
+      #map {
+        height: 500px;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="overlay" class="overlay"></div>
+    
+    <!-- Menu pour Mobile -->
+    <div id="mobile-menu" class="mobile-main-menu">
+      <ul>
+        <li><a href="Login.html"> Connexion </a></li>
+        <li><a href="index.html">Sports</a></li>
+        <li><a href="athletes.html">Athlètes</a></li>
+        <li><a href="infos.html">Infos</a></li>
+        <li><a href="records.html">Records</a></li>
+        <li><a href="courses.html">Prochaines Courses</a></li>
+        <li><a href="categories.html">Catégories</a></li>
+      </ul>
+    </div>
+
+    <!-- Header et Menu Desktop -->
+    <header class="main-header">
+      <nav class="desktop-main-menu">
+      </nav>
+    </header>
+
+    <!-- Hamburger Menu (Mobile) -->
+    <button id="menu-btn" class="hamburger" type="button">
+      <span class="hamburger-top"></span>
+      <span class="hamburger-middle"></span>
+      <span class="hamburger-bottom"></span>
+    </button>
+
+    <!-- Section A -->
+    <section class="section-a">
+      <div class="section-inner">
+        <!-- Contenu de la section A -->
+      </div>
+    </section>
+
+    <!-- Section B -->
+    <section class="section-b">
+        <h1>Courses</h1>
+        <hr>
+        <label for="courseSelector">Choisissez une course :</label>
+        <select id="courseSelector">
+          <option disabled selected>-- Sélectionnez une course --</option>
+        </select>
+
+        <div id="map"></div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+    </footer>
+
+    <!-- Google Maps API -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7Y32T_PJHZxYcK3BJYJFNwSl6cuvLXpo&callback=initMap" defer></script>
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    var allCourses = [];
+    var map;
+    var markers = [];
+    var polyline;
+
+    // Charger les données depuis courses.json
+    function loadCourses() {
+        $.ajax({
+            url: "courses.json",
+            method: "GET",
+            dataType: "json",
+            success: function(data) {
+                allCourses = data;
+                populateSelector();
+                initMap(); // Initialiser la carte avec la première course si nécessaire
+            },
+            error: function(err) {
+                console.error("Erreur de chargement JSON :", err);
+            }
+        });
+    }
+
+    // Remplir le <select> avec les noms des courses
+    function populateSelector() {
+        const selector = $("#courseSelector");
+        allCourses.forEach((data, index) => {
+            selector.append(`<option value="${index}">${data.name}</option>`);
+        });
+
+        // Événement au changement de sélection
+        selector.on("change", function() {
+            const selectedIndex = $(this).val();
+            showCourse(selectedIndex);
+        });
+    }
+
+    // Initialiser la carte vide
+    function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: 48.859, lng: 2.347 }, // Position par défaut (Paris)
+            zoom: 14,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+    }
+
+    // Afficher les marqueurs et la polyligne pour la course sélectionnée
+    function showCourse(index) {
+        const course = allCourses[index];
+
+        // Nettoyer anciens marqueurs
+        markers.forEach(marker => marker.setMap(null));
+        markers = [];
+
+        // Supprimer ancienne polyligne
+        if (polyline) {
+            polyline.setMap(null);
+        }
+
+        // Ajouter les nouveaux points
+        const bounds = new google.maps.LatLngBounds();
+        const pathCoords = [];
+
+        course.points.forEach((point, idx) => {
+            const position = new google.maps.LatLng(point.lat, point.lng);
+            bounds.extend(position);
+            pathCoords.push(position);
+
+            const marker = new google.maps.Marker({
+                position: position,
+                map: map,
+                title: `${course.name} - Point ${idx + 1}`
+            });
+
+            markers.push(marker);
+        });
+
+        // Afficher polyligne
+        polyline = new google.maps.Polyline({
+            path: pathCoords,
+            geodesic: true,
+            strokeColor: "#FF0000",
+            strokeOpacity: 1.0,
+            strokeWeight: 2
+        });
+        polyline.setMap(map);
+
+        // Ajuster la vue
+        map.fitBounds(bounds);
+    }
+
+    $(document).ready(function() {
+        loadCourses();
+    });
+</script>
+
+    <script src="js/script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>JRostand Stade Repères</title>
+</head>
+<body>
+
+<h1>JRostand Repères Stade</h1>
+<hr>
+<div id="map"></div>
+
+<!-- Google Maps API -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7Y32T_PJHZxYcK3BJYJFNwSl6cuvLXpo&callback=initMap" defer></script>
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    let markers = []; // Stockera les données JSON
+
+    // Chargement AJAX
+    function loadDoc() {
+        $.ajax({
+            url: "markersJrostand.json",
+            method: "GET",
+            dataType: "json",
+            success: function(dataMarkers) {
+                markers = dataMarkers;
+                for (let i = 0; i < markers.length; i++) {
+                    let marker = markers[i];
+                    for (let key in marker) {
+                        console.log(key + " : " + marker[key]);
+                    }
+                    console.log("____________");
+                }
+                initMap(); // Appel de la carte après chargement
+            },
+            error: function(err) {
+                console.error("Erreur lors du chargement des données :", err);
+            }
+        });
+    }
+
+    // Initialisation Google Maps
+    function initMap() {
+        const center = { lat: 48.95930033308523, lng: 2.5477890651742516 };
+        const map = new google.maps.Map(document.getElementById("map"), {
+            center: center,
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+
+        const pathCoords = []; // pour la polyligne
+        const infoWindow = new google.maps.InfoWindow(); // une seule InfoWindow
+
+        // Création des marqueurs
+        for (let i = 0; i < markers.length; i++) {
+            const data = markers[i];
+            const position = { lat: data.lat, lng: data.lng };
+            pathCoords.push(position);
+
+            const marker = new google.maps.Marker({
+                position: position,
+                map: map,
+                title: "Repère " + data.id
+            });
+
+            // Clic = ouvrir l'InfoWindow avec l'ID
+            marker.addListener('click', function () {
+                infoWindow.setContent(`<div><strong>Repère ID:</strong> ${data.id}</div>`);
+                infoWindow.open(map, marker);
+            });
+        }
+
+        // Ajout de la polyligne
+        const flightPath = new google.maps.Polyline({
+            path: pathCoords,
+            geodesic: true,
+            strokeColor: "#FF0000",
+            strokeOpacity: 1.0,
+            strokeWeight: 2,
+        });
+        flightPath.setMap(map);
+    }
+
+    // Lancer le chargement au démarrage de la page
+    window.onload = loadDoc;
+</script>
+
+</body>
+</html>
