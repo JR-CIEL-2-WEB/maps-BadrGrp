@@ -1,28 +1,76 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>JRostand Stade Repères</title>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Lien vers le fichier CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+
+    <title> Run </title>
+
     <style>
-        #map {
-            height: 500px;
-            width: 100%;
-        }
+      #map {
+        height: 500px;
+        width: 100%;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
+    <div id="overlay" class="overlay"></div>
+    
+    <!-- Menu pour Mobile -->
+    <div id="mobile-menu" class="mobile-main-menu">
+      <ul>
+        <li><a href="Login.html"> Connexion </a></li>
+        <li><a href="index.html">Sports</a></li>
+        <li><a href="athletes.html">Athlètes</a></li>
+        <li><a href="infos.html">Infos</a></li>
+        <li><a href="records.html">Records</a></li>
+        <li><a href="courses.html">Prochaines Courses</a></li>
+        <li><a href="categories.html">Catégories</a></li>
+      </ul>
+    </div>
 
-<h1>Courses</h1>
-<hr>
+    <!-- Header et Menu Desktop -->
+    <header class="main-header">
+      <nav class="desktop-main-menu">
+      </nav>
+    </header>
 
-<label for="courseSelector">Choisissez une course :</label>
-<select id="courseSelector">
-    <option disabled selected>-- Sélectionnez une course --</option>
-</select>
+    <!-- Hamburger Menu (Mobile) -->
+    <button id="menu-btn" class="hamburger" type="button">
+      <span class="hamburger-top"></span>
+      <span class="hamburger-middle"></span>
+      <span class="hamburger-bottom"></span>
+    </button>
 
-<div id="map"></div>
+    <!-- Section A -->
+    <section class="section-a">
+      <div class="section-inner">
+        <!-- Contenu de la section A -->
+      </div>
+    </section>
 
-<!-- Google Maps API -->
+    <!-- Section B -->
+    <section class="section-b">
+        <h1>Courses</h1>
+        <hr>
+        <label for="courseSelector">Choisissez une course :</label>
+        <select id="courseSelector">
+          <option disabled selected>-- Sélectionnez une course --</option>
+        </select>
+
+        <div id="map"></div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+    </footer>
+
+    <!-- Google Maps API -->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA7Y32T_PJHZxYcK3BJYJFNwSl6cuvLXpo&callback=initMap" defer></script>
 <!-- jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -42,7 +90,7 @@
             success: function(data) {
                 allCourses = data;
                 populateSelector();
-                initMap(); 
+                initMap(); // Initialiser la carte avec la première course si nécessaire
             },
             error: function(err) {
                 console.error("Erreur de chargement JSON :", err);
@@ -123,5 +171,6 @@
     });
 </script>
 
-</body>
+    <script src="js/script.js"></script>
+  </body>
 </html>

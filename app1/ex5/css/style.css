@@ -10,8 +10,8 @@
 
 body {
   /* TODO 1 https://www.w3schools.com/cssref/pr_font_font-family.php */
-  background: #a85c2d;
-  color: #a85c2d;
+  background: #A0522D;
+  color: #fffbf9;
   /* TODO 2 https://www.w3schools.com/cssref/pr_text_color.php */
 }
 
@@ -491,3 +491,4 @@ footer ul li a:hover {
             height: 500px;
             width: 100%;
         }
+
