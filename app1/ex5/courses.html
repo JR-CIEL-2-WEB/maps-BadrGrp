@@ -42,7 +42,7 @@
             success: function(data) {
                 allCourses = data;
                 populateSelector();
-                initMap(); // Initialiser la carte avec la première course si nécessaire
+                initMap(); 
             },
             error: function(err) {
                 console.error("Erreur de chargement JSON :", err);
